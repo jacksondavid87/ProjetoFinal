@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{gestaoFabricantesBean.consultar}" />
+		</f:metadata>
+
+		<h1>Cadastro de Fabricantes</h1>
+
+		<h:form id="frm">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{gestaoFabricantesBean.prepararNovoCadastro}"
+						process="@this" update="fabricante-dialog"
+						oncomplete="PF('edicaoFabricanteDialog').show()">
+						<p:resetInput target="fabricante-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="fabricante-dialog"
+						oncomplete="PF('edicaoFabricanteDialog').show()"
+						disabled="#{gestaoFabricantesBean.fabricanteSelecionado == null}">
+						<p:resetInput target="fabricante-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{gestaoFabricantesBean.fabricanteSelecionado}"
+							target="#{gestaoFabricantesBean.fabricanteEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="fabricantes-table msgs toolbar"
+						action="#{gestaoFabricantesBean.excluir}"
+						disabled="#{gestaoFabricantesBean.fabricanteSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Fabricante?" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-arrowthick-1-s"
+						title="Exportar para XLS" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{gestaoFabricantesBean.todosFabricantes}"
+				var="fabricante" emptyMessage="Nenhum fabricante cadastrado."
+				rows="10" paginator="true" paginatorPosition="bottom"
+				style="margin-top: 10px" id="fabricantes-table"
+				selection="#{gestaoFabricantesBean.fabricanteSelecionado}"
+				selectionMode="single" rowKey="#{fabricante.fab_codigo}">
+
+				<p:ajax event="rowSelect" update=":frm:toolbar" />
+				<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+				<p:column headerText="Código" width="200">
+					<h:outputText value="#{fabricante.fab_codigo}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{fabricante.nomeFabricante}">
+					<h:outputText value="#{fabricante.nomeFabricante}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Novo Fabricante" widgetVar="edicaoFabricanteDialog"
+				id="fabricante-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+				<p:defaultCommand target="salvar-button" scope="fabricante-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+					<p:outputLabel value="Nome do Fabricante" for="nome-fabricante" />
+					<p:inputText id="nome-fabricante" size="60" maxlength="80"
+						value="#{gestaoFabricantesBean.fabricanteEdicao.nomeFabricante}" />
+
+					<p:outputLabel />
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{gestaoFabricantesBean.salvar}"
+						process="fabricante-dialog" update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoFabricanteDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

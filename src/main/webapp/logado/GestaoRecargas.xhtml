@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{gestaoRecargasBean.consultar}" />
+			<!-- <f:viewAction action="#{gestaoRecargasBean.consultarProduto}" /> -->
+			<f:viewAction action="#{gestaoRecargasBean.consultarFabricante}" />
+			<f:viewAction action="#{gestaoRecargasBean.consultarCliente}" />
+		</f:metadata>
+
+		<h1>Cadastro de Recargas</h1>
+
+		<h:form id="frm">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{gestaoRecargasBean.prepararNovoCadastro}"
+						process="@this" update="recarga-dialog"
+						oncomplete="PF('edicaoRecargaDialog').show()">
+						<p:resetInput target="recarga-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="recarga-dialog"
+						oncomplete="PF('edicaoRecargaDialog').show()"
+						disabled="#{gestaoRecargasBean.recargaSelecionada == null}">
+						<p:resetInput target="recarga-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{gestaoRecargasBean.recargaSelecionada}"
+							target="#{gestaoRecargasBean.recargaEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="recargas-table msgs toolbar"
+						action="#{gestaoRecargasBean.excluir}"
+						disabled="#{gestaoRecargasBean.recargaSelecionada == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir a Recarga?" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-arrowthick-1-s"
+						title="Exportar para XLS" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{gestaoRecargasBean.todasRecargas}"
+				var="recarga" emptyMessage="Nenhuma Recarga cadastrada." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="recargas-table"
+				selection="#{gestaoRecargasBean.recargaSelecionada}"
+				selectionMode="single" rowKey="#{recarga.rec_codigo}">
+
+				<p:ajax event="rowSelect" update=":frm:toolbar" />
+				<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+				<p:column headerText="Código" width="60">
+					<h:outputText value="#{recarga.rec_codigo}" />
+				</p:column>
+				<p:column headerText="Cliente" sortBy="#{recarga.cliente.cli_nome}">
+					<h:outputText value="#{recarga.cliente.cli_nome}" />
+				</p:column>
+				<p:column headerText="Cartucho" width="100"
+					sortBy="#{recarga.rec_cartucho}">
+					<h:outputText value="#{recarga.rec_cartucho}" />
+				</p:column>
+				<p:column headerText="Quantidade" width="80">
+					<h:outputText value="#{recarga.rec_quantidade}" />
+				</p:column>
+				<p:column headerText="Valor" width="80">
+					<h:outputText value="#{recarga.rec_valor}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Data" width="100">
+					<h:outputText value="#{recarga.rec_data}">
+						<f:convertDateTime dateStyle="default" timeZone="pt_BR"
+							type="date" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Pago" width="120">
+					<h:outputText value="#{recarga.rec_pago}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Nova Recarga" widgetVar="edicaoRecargaDialog"
+				id="recarga-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+				<p:defaultCommand target="salvar-button" scope="recarga-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+
+					<p:outputLabel value="Cliente" for="cliente" />
+					<p:selectOneMenu id="cliente" style="width:200px"
+						value="#{gestaoRecargasBean.recargaEdicao.cliente}" converter="generic">
+						<f:selectItem itemLabel="Seleciona Cliente" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{gestaoRecargasBean.todosClientes}"
+							var="cli" itemLabel="#{cli.cli_nome}" itemValue="#{cli}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Fabricante" for="fabricante" />
+					<p:selectOneMenu id="fabricante" style="width:200px"
+						converter="generic" process="@this" value="#{gestaoRecargasBean.recargaEdicao.fabricante}">
+						<f:selectItem itemLabel="Seleciona Fabricante" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{gestaoRecargasBean.todosFabricantes}"
+							var="fab" itemLabel="#{fab.nomeFabricante}" itemValue="#{fab}" />
+						<!-- <p:ajax event="" process="" update="" />-->
+						<p:ajax event="change" listener="#{gestaoRecargasBean.consultarProduto}" 
+							update=":frm:produto" immediate="true"/> 
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Produto" for="produto" />
+					<p:selectOneMenu id="produto" style="width:200px"
+						converter="generic" value="#{gestaoRecargasBean.recargaEdicao.produto}" process="@this">
+						<f:selectItem itemLabel="Seleciona Produto" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{gestaoRecargasBean.todosProdutos}"
+							var="pro" itemLabel="#{pro.pro_nome}" itemValue="#{pro}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Cartucho" for="rec_cartucho" />
+					<p:inputText id="rec_cartucho" size="50" maxlength="100"
+						value="#{gestaoRecargasBean.recargaEdicao.rec_cartucho}" />
+
+					<p:outputLabel value="Quantidade" for="rec_qtd" />
+					<p:inputText id="rec_qtd" size="40" maxlength="80"
+						value="#{gestaoRecargasBean.recargaEdicao.rec_quantidade}" />
+
+					<p:outputLabel value="Valor da Recarga" for="rec_valor" />
+					<p:inputText id="rec_valor" size="40" maxlength="80"
+						value="#{gestaoRecargasBean.recargaEdicao.rec_valor}" />
+
+					<p:outputLabel value="Data da Recarga" for="rec_data" />
+					<p:calendar id="rec_data" size="10"
+						value="#{gestaoRecargasBean.recargaEdicao.rec_data}"
+						pattern="dd/MM/yyyy" mask="99/99/9999" />
+
+					<p:outputLabel value="Pago" for="rec_pago" />
+					<p:inputText id="rec_pago" size="10" maxlength="10"
+						value="#{gestaoRecargasBean.recargaEdicao.rec_pago}" />
+
+					<p:outputLabel />
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{gestaoRecargasBean.salvar}" process="recarga-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoRecargaDialog').hide()" />
+
+				</h:panelGrid>
+			</p:dialog>
+
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

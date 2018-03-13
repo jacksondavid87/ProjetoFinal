@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{gestaoProdutosBean.consultar}" />
+			<f:viewAction action="#{gestaoProdutosBean.consultarFabricante}" />
+		</f:metadata>
+
+		<h1>Cadastro de Produtos</h1>
+
+		<h:form id="frm">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{gestaoProdutosBean.prepararNovoCadastro}"
+						process="@this" update="produto-dialog"
+						oncomplete="PF('edicaoProdutoDialog').show()">
+						<p:resetInput target="produto-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="produto-dialog"
+						oncomplete="PF('edicaoProdutoDialog').show()"
+						disabled="#{gestaoProdutosBean.produtoSelecionado == null}">
+						<p:resetInput target="produto-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{gestaoProdutosBean.produtoSelecionado}"
+							target="#{gestaoProdutosBean.produtoEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="produtos-table msgs toolbar"
+						action="#{gestaoProdutosBean.excluir}"
+						disabled="#{gestaoProdutosBean.produtoSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Produto?" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-arrowthick-1-s"
+						title="Exportar para XLS" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{gestaoProdutosBean.todosProdutos}"
+				var="produto" emptyMessage="Nenhum Produto cadastrado." rows="10"
+				paginator="true" paginatorPosition="bottom" style="margin-top: 10px"
+				id="produtos-table"
+				selection="#{gestaoProdutosBean.produtoSelecionado}"
+				selectionMode="single" rowKey="#{produto.pro_codigo}">
+
+				<p:ajax event="rowSelect" update=":frm:toolbar" />
+				<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+				<p:column headerText="Código" width="80">
+					<h:outputText value="#{produto.pro_codigo}" />
+				</p:column>
+				<p:column headerText="Fabricante" width="150">
+					<h:outputText value="#{produto.fabricante.nomeFabricante}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{produto.pro_nome}">
+					<h:outputText value="#{produto.pro_nome}" />
+				</p:column>
+				<p:column headerText="Quantidade" width="100">
+					<h:outputText value="#{produto.pro_qtd}" />
+				</p:column>
+				<p:column headerText="Valor de venda" width="100">
+					<h:outputText value="#{produto.pro_valor_venda}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Aplicação">
+					<h:outputText value="#{produto.pro_aplicacao}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Novo Produto" widgetVar="edicaoProdutoDialog"
+				id="produto-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+				<p:defaultCommand target="salvar-button" scope="produto-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+
+					<p:outputLabel value="Nome" for="pro_nome" />
+					<p:inputText id="pro_nome" size="60" maxlength="80"
+						value="#{gestaoProdutosBean.produtoEdicao.pro_nome}" />
+
+					<p:outputLabel value="Quantidade" for="pro_qtd" />
+					<p:inputText id="pro_qtd" size="40" maxlength="80"
+						value="#{gestaoProdutosBean.produtoEdicao.pro_qtd}" />
+
+					<p:outputLabel value="Valor de Compra" for="pro_valor_compra" />
+					<p:inputText id="pro_valor_compra" size="40" maxlength="80"
+						value="#{gestaoProdutosBean.produtoEdicao.pro_valor_compra}" />
+
+					<p:outputLabel value="Valor Venda" for="pro_valor_venda" />
+					<p:inputText id="pro_valor_venda" size="40" maxlength="80"
+						value="#{gestaoProdutosBean.produtoEdicao.pro_valor_venda}" />
+
+					<p:outputLabel value="Aplicação" for="pro_aplicacao" />
+					<p:inputText id="pro_aplicacao" size="60" maxlength="120"
+						value="#{gestaoProdutosBean.produtoEdicao.pro_aplicacao}" />
+
+					<p:outputLabel value="Fabricante" for="fabricante" />
+					<p:selectOneMenu id="fabricante" style="width:200px"
+						converter="generic" value="#{gestaoProdutosBean.produtoEdicao.fabricante}" process="@this">
+						<f:selectItem itemLabel="Seleciona Fabricante" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{gestaoProdutosBean.todosFabricantes}"
+							var="fab" itemLabel="#{fab.nomeFabricante}"
+							itemValue="#{fab}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel />
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{gestaoProdutosBean.salvar}" process="produto-dialog"
+						update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoProdutoDialog').hide()" />
+
+				</h:panelGrid>
+			</p:dialog>
+
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

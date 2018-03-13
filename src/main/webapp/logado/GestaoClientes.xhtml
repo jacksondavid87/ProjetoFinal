@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<f:viewAction action="#{gestaoClientesBean.consultar}" />
+		</f:metadata>
+
+		<h1>Cadastro de Clientes</h1>
+
+		<h:form id="frm">
+
+			<p:messages id="msgs" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{gestaoClientesBean.prepararNovoCadastro}"
+						process="@this" update="cliente-dialog"
+						oncomplete="PF('edicaoClienteDialog').show()">
+						<p:resetInput target="cliente-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="cliente-dialog"
+						oncomplete="PF('edicaoClienteDialog').show()"
+						disabled="#{gestaoClientesBean.clienteSelecionado == null}">
+						<p:resetInput target="cliente-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{gestaoClientesBean.clienteSelecionado}"
+							target="#{gestaoClientesBean.clienteEdicao}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="clientes-table msgs toolbar"
+						action="#{gestaoClientesBean.excluir}"
+						disabled="#{gestaoClientesBean.clienteSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+							message="Tem certeza que deseja excluir o Cliente?" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-arrowthick-1-s"
+						title="Exportar para XLS" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{gestaoClientesBean.todosClientes}"
+				var="cliente" emptyMessage="Nenhum Cliente cadastrado."
+				rows="10" paginator="true" paginatorPosition="bottom"
+				style="margin-top: 10px" id="clientes-table"
+				selection="#{gestaoClientesBean.clienteSelecionado}"
+				selectionMode="single" rowKey="#{cliente.cli_codigo}">
+
+				<p:ajax event="rowSelect" update=":frm:toolbar" />
+				<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+				<p:column headerText="Código" width="80">
+					<h:outputText value="#{cliente.cli_codigo}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{cliente.cli_nome}" width="350">
+					<h:outputText value="#{cliente.cli_nome}" />
+				</p:column>
+				<p:column headerText="Razão Social" width="350">
+					<h:outputText value="#{cliente.cli_razao_social}" />
+				</p:column>
+				<p:column headerText="CNPJ / CPF">
+					<h:outputText value="#{cliente.cli_cpf_cnpj}" />
+				</p:column>
+				<p:column headerText="Telefones">
+					<h:outputText value="#{cliente.cli_fones}" />
+				</p:column>
+				<p:column headerText="Nome Contato">
+					<h:outputText value="#{cliente.cli_nome_contato}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="Novo Cliente" widgetVar="edicaoClienteDialog"
+				id="cliente-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+				<p:messages id="msgs-dialog" />
+				<p:defaultCommand target="salvar-button" scope="cliente-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+				
+					<p:outputLabel value="Razão Social" for="razao-social" />
+					<p:inputText id="razao-social" size="60" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_razao_social}" />
+						
+					<p:outputLabel value="Nome" for="nome-cliente" />
+					<p:inputText id="nome-cliente" size="60" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_nome}" />
+						
+					<p:outputLabel value="CNPJ" for="cnpj" />
+					<p:inputText id="cnpj" size="40" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_cpf_cnpj}" />
+					
+					<p:outputLabel value="Telefones" for="fones" />
+					<p:inputText id="fones" size="40" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_fones}" />
+						
+					<p:outputLabel value="Email" for="email" />
+					<p:inputText id="email" size="40" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_email}" />
+						
+					<p:outputLabel value="Cidade" for="cidade" />
+					<p:inputText id="cidade" size="60" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_cidade}" />
+						
+					<p:outputLabel value="Rua" for="rua" />
+					<p:inputText id="rua" size="60" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_rua}" />
+						
+					<p:outputLabel value="Bairro" for="bairro" />
+					<p:inputText id="bairro" size="60" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_bairro}" />
+						
+					<p:outputLabel value="Número" for="numero" />
+					<p:inputText id="numero" size="10" maxlength="10"
+						value="#{gestaoClientesBean.clienteEdicao.cli_numero}" />
+						
+					<p:outputLabel value="Nome do Contato" for="nome-contato" />
+					<p:inputText id="nome-contato" size="40" maxlength="80"
+						value="#{gestaoClientesBean.clienteEdicao.cli_nome_contato}" />
+						
+					
+					<p:outputLabel />
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{gestaoClientesBean.salvar}"
+						process="cliente-dialog" update="msgs-dialog painel-dialog"
+						oncomplete="if (!args.validationFailed) PF('edicaoClienteDialog').hide()" />
+						
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
