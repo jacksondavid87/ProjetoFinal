@@ -67,7 +67,7 @@ public class GestaoRecargasBean implements Serializable {
 	}
 	
 	public void excluir() {
-		cadastroRecarga.excluir(recargaEdicao);
+		cadastroRecarga.excluir(recargaSelecionada);
 		recargaSelecionada = null;
 
 		consultar();
