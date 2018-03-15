@@ -85,7 +85,7 @@ public class GestaoRecargasBean implements Serializable {
 		System.out.println("Chegou!!!");
 		System.out.println(recargaEdicao.getFabricante());
 		//todosProdutos = produtos.todos();
-		//todosProdutos = produtos.todosPorFab(recargaEdicao.getFabricante());
+		todosProdutos = produtos.todosPorFab(recargaEdicao.getFabricante().getId());
 		//System.out.println(todosProdutos.size());
 
 	}

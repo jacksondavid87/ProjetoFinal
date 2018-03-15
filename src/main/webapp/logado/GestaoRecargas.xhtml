@@ -123,9 +123,8 @@
 							noSelectionOption="true" />
 						<f:selectItems value="#{gestaoRecargasBean.todosFabricantes}"
 							var="fab" itemLabel="#{fab.nomeFabricante}" itemValue="#{fab}" />
-						<!-- <p:ajax event="" process="" update="" />-->
 						<p:ajax event="change" listener="#{gestaoRecargasBean.consultarProduto}" 
-							update=":frm:produto" immediate="true"/> 
+							update=":frm:produto"/> 
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Produto" for="produto" />
