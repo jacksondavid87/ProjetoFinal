@@ -1,11 +1,11 @@
 package controller;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -52,7 +52,9 @@ public class GestaoRecargasBean implements Serializable {
 	private List<Cliente> todosClientes;
 	private Recarga recargaEdicao = new Recarga();
 	private Recarga recargaSelecionada;
-	
+	private Date data_inicio;
+	private Date data_fim;
+
 	public void prepararNovoCadastro() {
 		recargaEdicao = new Recarga();
 	}
@@ -76,9 +78,9 @@ public class GestaoRecargasBean implements Serializable {
 	}
 	
 	public void consultar() {
-		todasRecargas = recargas.todas();
+		todasRecargas = recargas.todas(null, null);
 		System.out.println(todasRecargas.size());
-
+		//RequestContext.getCurrentInstance().update(Arrays.asList("frm:recargas-table"));
 	}
 	
 	public void consultarProduto() {
@@ -100,6 +102,16 @@ public class GestaoRecargasBean implements Serializable {
 		todosClientes = clientes.todos();
 		System.out.println(todosClientes.size());
 
+	}
+	
+	public void filtro() {
+		System.out.println(getData_inicio());
+		System.out.println(getData_fim());
+		todasRecargas = recargas.todas(getData_inicio(), getData_fim());
+		System.out.println(todasRecargas.size());
+		//RequestContext.getCurrentInstance().update(Arrays.asList("frm:recargas-table"));
+
+		
 	}
 
 	public List<Recarga> getTodasRecargas() {
@@ -134,5 +146,20 @@ public class GestaoRecargasBean implements Serializable {
 		this.recargaSelecionada = recargaSelecionada;
 	}
 
+	public Date getData_inicio() {
+		return data_inicio;
+	}
+
+	public void setData_inicio(Date data_inicio) {
+		this.data_inicio = data_inicio;
+	}
+
+	public Date getData_fim() {
+		return data_fim;
+	}
+
+	public void setData_fim(Date data_fim) {
+		this.data_fim = data_fim;
+	}
 	
 }

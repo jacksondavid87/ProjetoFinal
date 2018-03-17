@@ -53,6 +53,24 @@
 							message="Tem certeza que deseja excluir a Recarga?" />
 
 					</p:commandButton>
+					
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+									
+					<p:outputLabel value="Filtro Por Data: "/>
+					
+					<p:calendar id="data_inicio" size="10" process="@this"
+						value="#{gestaoRecargasBean.data_inicio}"
+						pattern="dd/MM/yyyy" mask="99/99/9999" />
+						
+					<p:calendar id="data_fim" size="10" process="@this"
+						value="#{gestaoRecargasBean.data_fim}"
+						pattern="dd/MM/yyyy" mask="99/99/9999" />
+						
+					<p:commandButton icon="ui-icon-search" title="Filtrar"
+						process="@this,data_inicio,data_fim" update="recargas-table"
+						action="#{gestaoRecargasBean.filtro}" />
 
 				</f:facet>
 			</p:toolbar>
