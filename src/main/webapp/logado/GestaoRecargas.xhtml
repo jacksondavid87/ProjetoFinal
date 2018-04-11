@@ -57,6 +57,18 @@
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
 					</span>
+					
+					<p:commandButton icon="ui-icon-print" ajax="false" immediate="true" title="Baixar em PDF">
+						<p:dataExporter type="pdf" target="recargas-table" fileName="Data" pageOnly="false"/>
+					</p:commandButton>
+					
+					<p:commandButton icon="ui-icon-arrowthick-1-s" ajax="false" immediate="true" title="Baixar em Excel">
+						<p:dataExporter type="xls" target="recargas-table" fileName="Data" pageOnly="false"/>
+					</p:commandButton>
+					
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
 									
 					<p:outputLabel value="Filtro Por Data: "/>
 					
