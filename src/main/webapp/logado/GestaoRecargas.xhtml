@@ -53,33 +53,47 @@
 							message="Tem certeza que deseja excluir a Recarga?" />
 
 					</p:commandButton>
-					
+					<!-- icon="fa fa-fw fa-dollar" -->
+					<p:commandButton icon="ui-icon-cart" title="Receber"
+						process="@this" update="recargas-table msgs toolbar"
+						action="#{gestaoRecargasBean.receber}"
+						disabled="#{gestaoRecargasBean.recargaSelecionada == null}">
+						<p:confirm icon="ui-icon-alert"
+							header="Confirmação de recebimento"
+							message="Deseja confirmar o recebimento?" />
+
+					</p:commandButton>
+
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
 					</span>
-					
-					<p:commandButton icon="ui-icon-print" ajax="false" immediate="true" title="Baixar em PDF">
-						<p:dataExporter type="pdf" target="recargas-table" fileName="Data" pageOnly="false"/>
+
+					<p:commandButton icon="ui-icon-print" ajax="false" immediate="true"
+						title="Baixar em PDF">
+						<p:dataExporter type="pdf" target="recargas-table" fileName="Data"
+							pageOnly="false" />
 					</p:commandButton>
-					
-					<p:commandButton icon="ui-icon-arrowthick-1-s" ajax="false" immediate="true" title="Baixar em Excel">
-						<p:dataExporter type="xls" target="recargas-table" fileName="Data" pageOnly="false"/>
+
+					<p:commandButton icon="ui-icon-arrowthick-1-s" ajax="false"
+						immediate="true" title="Baixar em Excel">
+						<p:dataExporter type="xls" target="recargas-table" fileName="Data"
+							pageOnly="false" />
 					</p:commandButton>
-					
+
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
 					</span>
-									
-					<p:outputLabel value="Filtro Por Data: "/>
-					
+
+					<p:outputLabel value="Filtro Por Data: " />
+
 					<p:calendar id="data_inicio" size="10" process="@this"
-						value="#{gestaoRecargasBean.data_inicio}"
-						pattern="dd/MM/yyyy" mask="99/99/9999" />
-						
+						value="#{gestaoRecargasBean.data_inicio}" pattern="dd/MM/yyyy"
+						mask="99/99/9999" />
+
 					<p:calendar id="data_fim" size="10" process="@this"
-						value="#{gestaoRecargasBean.data_fim}"
-						pattern="dd/MM/yyyy" mask="99/99/9999" />
-						
+						value="#{gestaoRecargasBean.data_fim}" pattern="dd/MM/yyyy"
+						mask="99/99/9999" />
+
 					<p:commandButton icon="ui-icon-search" title="Filtrar"
 						process="@this,data_inicio,data_fim" update="recargas-table"
 						action="#{gestaoRecargasBean.filtro}" />
@@ -137,7 +151,8 @@
 
 					<p:outputLabel value="Cliente" for="cliente" />
 					<p:selectOneMenu id="cliente" style="width:200px"
-						value="#{gestaoRecargasBean.recargaEdicao.cliente}" converter="generic">
+						value="#{gestaoRecargasBean.recargaEdicao.cliente}"
+						converter="generic">
 						<f:selectItem itemLabel="Seleciona Cliente" itemValue=""
 							noSelectionOption="true" />
 						<f:selectItems value="#{gestaoRecargasBean.todosClientes}"
@@ -146,18 +161,22 @@
 
 					<p:outputLabel value="Fabricante" for="fabricante" />
 					<p:selectOneMenu id="fabricante" style="width:200px"
-						converter="generic" process="@this" value="#{gestaoRecargasBean.recargaEdicao.fabricante}">
+						converter="generic" process="@this"
+						value="#{gestaoRecargasBean.recargaEdicao.fabricante}">
 						<f:selectItem itemLabel="Seleciona Fabricante" itemValue=""
 							noSelectionOption="true" />
 						<f:selectItems value="#{gestaoRecargasBean.todosFabricantes}"
 							var="fab" itemLabel="#{fab.nomeFabricante}" itemValue="#{fab}" />
-						<p:ajax event="change" listener="#{gestaoRecargasBean.consultarProduto}" 
-							update=":frm:produto"/> 
+						<p:ajax event="change"
+							listener="#{gestaoRecargasBean.consultarProduto}"
+							update=":frm:produto" />
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Produto" for="produto" />
 					<p:selectOneMenu id="produto" style="width:200px"
-						converter="generic" value="#{gestaoRecargasBean.recargaEdicao.produto}" process="@this">
+						converter="generic"
+						value="#{gestaoRecargasBean.recargaEdicao.produto}"
+						process="@this">
 						<f:selectItem itemLabel="Seleciona Produto" itemValue=""
 							noSelectionOption="true" />
 						<f:selectItems value="#{gestaoRecargasBean.todosProdutos}"

@@ -113,6 +113,17 @@ public class GestaoRecargasBean implements Serializable {
 
 		
 	}
+	
+	public void receber() {
+		recargaSelecionada.setRec_pago("SIM");
+		//System.out.println(recargaSelecionada.getRec_pago());
+		cadastroRecarga.salvar(recargaSelecionada);
+		consultar();
+		recargaSelecionada = null;
+		RequestContext.getCurrentInstance().update(Arrays.asList("frm:msgs", "frm:recargas-table"));
+		
+		messages.info("Recarga Recebida!");
+	}
 
 	public List<Recarga> getTodasRecargas() {
 		return todasRecargas;
