@@ -26,129 +26,122 @@ import controller.SampleEntity;
 public class Recarga implements Serializable, SampleEntity {
 
 	private static final long serialVersionUID = -4494034287537631060L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recarga_rec_codigo_seq")
 	private long rec_codigo;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "pro_codigo")
 	private Produto produto;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "fab_codigo")
 	private Fabricante fabricante;
-	
+
 	@NotEmpty
 	private String rec_cartucho;
-	
+
 	@NotNull
 	private int rec_quantidade;
-	
+
 	@NotNull
 	private double rec_valor;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cli_codigo")
 	private Cliente cliente;
-	
+
 	@NotNull
 	@Past
 	@Temporal(TemporalType.DATE)
 	private Date rec_data;
-	
+
 	@NotEmpty
 	private String rec_pago;
+
+	@NotEmpty
+	private String rec_status;
 
 	public long getRec_codigo() {
 		return rec_codigo;
 	}
 
-
 	public void setRec_codigo(long rec_codigo) {
 		this.rec_codigo = rec_codigo;
 	}
-
 
 	public Produto getProduto() {
 		return produto;
 	}
 
-
 	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
-
 
 	public Fabricante getFabricante() {
 		return fabricante;
 	}
 
-
 	public void setFabricante(Fabricante fabricante) {
 		this.fabricante = fabricante;
 	}
-
 
 	public String getRec_cartucho() {
 		return rec_cartucho;
 	}
 
-
 	public void setRec_cartucho(String rec_cartucho) {
 		this.rec_cartucho = rec_cartucho;
 	}
-
 
 	public int getRec_quantidade() {
 		return rec_quantidade;
 	}
 
-
 	public void setRec_quantidade(int rec_quantidade) {
 		this.rec_quantidade = rec_quantidade;
 	}
-
 
 	public double getRec_valor() {
 		return rec_valor;
 	}
 
-
 	public void setRec_valor(double rec_valor) {
 		this.rec_valor = rec_valor;
 	}
-
 
 	public Cliente getCliente() {
 		return cliente;
 	}
 
-
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-
 
 	public Date getRec_data() {
 		return rec_data;
 	}
 
-
 	public void setRec_data(Date rec_data) {
 		this.rec_data = rec_data;
 	}
-
 
 	public String getRec_pago() {
 		return rec_pago;
 	}
 
-
 	public void setRec_pago(String rec_pago) {
 		this.rec_pago = rec_pago;
 	}
 
+	public String getRec_status() {
+		return rec_status;
+	}
+
+	public void setRec_status(String rec_status) {
+		this.rec_status = rec_status;
+	}
 
 	@Override
 	public int hashCode() {
@@ -162,14 +155,12 @@ public class Recarga implements Serializable, SampleEntity {
 		result = prime * result + ((rec_data == null) ? 0 : rec_data.hashCode());
 		result = prime * result + ((rec_pago == null) ? 0 : rec_pago.hashCode());
 		result = prime * result + rec_quantidade;
+		result = prime * result + ((rec_status == null) ? 0 : rec_status.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(rec_valor);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
-
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -214,13 +205,15 @@ public class Recarga implements Serializable, SampleEntity {
 			return false;
 		if (rec_quantidade != other.rec_quantidade)
 			return false;
+		if (rec_status == null) {
+			if (other.rec_status != null)
+				return false;
+		} else if (!rec_status.equals(other.rec_status))
+			return false;
 		if (Double.doubleToLongBits(rec_valor) != Double.doubleToLongBits(other.rec_valor))
 			return false;
 		return true;
 	}
-
-
-
 
 	@Override
 	public Long getId() {

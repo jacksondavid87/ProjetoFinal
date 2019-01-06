@@ -135,7 +135,10 @@
 							type="date" />
 					</h:outputText>
 				</p:column>
-				<p:column headerText="Pago" width="120">
+				<p:column headerText="Status" width="120">
+					<h:outputText value="#{recarga.rec_status}" />
+				</p:column>
+				<p:column headerText="Pago" width="100">
 					<h:outputText value="#{recarga.rec_pago}" />
 				</p:column>
 			</p:dataTable>
@@ -169,7 +172,7 @@
 							var="fab" itemLabel="#{fab.nomeFabricante}" itemValue="#{fab}" />
 						<p:ajax event="change"
 							listener="#{gestaoRecargasBean.consultarProduto}"
-							update=":frm:produto" />
+							update=":frm:produto"/>
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Produto" for="produto" />
@@ -201,8 +204,19 @@
 						pattern="dd/MM/yyyy" mask="99/99/9999" />
 
 					<p:outputLabel value="Pago" for="rec_pago" />
-					<p:inputText id="rec_pago" size="10" maxlength="10"
-						value="#{gestaoRecargasBean.recargaEdicao.rec_pago}" />
+					<p:selectOneMenu id="rec_pago" style="width:100px"
+						value="#{gestaoRecargasBean.recargaEdicao.rec_pago}">
+						<f:selectItem itemLabel="NÃO" itemValue="NÃO" />
+						<f:selectItem itemLabel="SIM" itemValue="SIM" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="Status" for="rec_status" />
+					<p:selectOneMenu id="rec_status" style="width:100px"
+						value="#{gestaoRecargasBean.recargaEdicao.rec_status}">
+						<f:selectItem itemLabel="EM RECARGA" itemValue="EM RECARGA" />
+						<f:selectItem itemLabel="REC. EFETUADA" itemValue="REC. EFETUADA" />
+					</p:selectOneMenu>
 
 					<p:outputLabel />
 					<p:commandButton value="Salvar" id="salvar-button"
