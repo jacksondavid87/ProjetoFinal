@@ -2,7 +2,9 @@ package controller;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
@@ -78,7 +80,17 @@ public class GestaoRecargasBean implements Serializable {
 	}
 	
 	public void consultar() {
-		todasRecargas = recargas.todas(null, null);
+		
+		Calendar cal = new GregorianCalendar();
+		cal = Calendar.getInstance();
+		int ultDia = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int mes = cal.get(Calendar.MONTH);
+		mes = mes+1;
+		int ano = cal.get(Calendar.YEAR);
+		String dataFim = ano+"-"+mes+"-"+ultDia;
+		String dataIni = ano+"-"+mes+"-"+"1";
+		
+		todasRecargas = recargas.todas(ConverteData.converteParaDate(dataIni), ConverteData.converteParaDate(dataFim));
 		System.out.println(todasRecargas.size());
 		//RequestContext.getCurrentInstance().update(Arrays.asList("frm:recargas-table"));
 	}
