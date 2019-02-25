@@ -67,7 +67,7 @@
 				<p:ajax event="rowSelect" update=":frm:toolbar" />
 				<p:ajax event="rowUnselect" update=":frm:toolbar" />
 
-				<p:column headerText="Código" width="80">
+				<p:column headerText="Código" width="70">
 					<h:outputText value="#{produto.pro_codigo}" />
 				</p:column>
 				<p:column headerText="Fabricante" width="150">
@@ -78,6 +78,11 @@
 				</p:column>
 				<p:column headerText="Quantidade" width="100">
 					<h:outputText value="#{produto.pro_qtd}" />
+				</p:column>
+				<p:column headerText="Valor de compra" width="110">
+					<h:outputText value="#{produto.pro_valor_compra}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
 				</p:column>
 				<p:column headerText="Valor de venda" width="100">
 					<h:outputText value="#{produto.pro_valor_venda}">
@@ -120,12 +125,13 @@
 
 					<p:outputLabel value="Fabricante" for="fabricante" />
 					<p:selectOneMenu id="fabricante" style="width:200px"
-						converter="generic" value="#{gestaoProdutosBean.produtoEdicao.fabricante}" process="@this">
+						converter="generic"
+						value="#{gestaoProdutosBean.produtoEdicao.fabricante}"
+						process="@this">
 						<f:selectItem itemLabel="Seleciona Fabricante" itemValue=""
 							noSelectionOption="true" />
 						<f:selectItems value="#{gestaoProdutosBean.todosFabricantes}"
-							var="fab" itemLabel="#{fab.nomeFabricante}"
-							itemValue="#{fab}" />
+							var="fab" itemLabel="#{fab.nomeFabricante}" itemValue="#{fab}" />
 					</p:selectOneMenu>
 
 
