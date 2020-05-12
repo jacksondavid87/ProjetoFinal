@@ -18,6 +18,8 @@
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
 <!-- 
+outro teste
+Um teste de commit
 String usuario = "admin";
 String senha = "J@ckson2580"; 
 -->
