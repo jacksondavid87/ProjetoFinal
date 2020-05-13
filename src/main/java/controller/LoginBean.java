@@ -20,7 +20,7 @@ public class LoginBean {
 
 	public String login() {
 		FacesContext context = FacesContext.getCurrentInstance();
-		//System.out.println(this.nomeUsuario+","+this.senha+",");
+		System.out.println(this.nomeUsuario+","+this.senha+",");
 		//System.out.println(new Date());
 		if (this.nomeUsuario.equals("jackson") && this.senha.equals("jackson")) {
 			System.out.println("Entrou!!!");
